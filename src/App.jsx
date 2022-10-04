@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import InputWithLabel from './components/InputWithLabel';
+import List from './components/List';
 
 function App() {
-  const stories = [
+  const initialStories = [
     {
       title: 'React',
       url: 'https://reactjs.org/',
@@ -25,7 +26,7 @@ function App() {
       author: 'Abramov, Andrew Clark',
       num_comments: 3,
       points: 5,
-      objectID: 1,
+      objectID: 2,
     },
   ];
 
@@ -33,9 +34,17 @@ function App() {
   // 2. after ui render, useEffect
   // 3. re-render/update
 
-  useEffect(() => {}, [])
+  useEffect(() => {}, []);
 
-  const [query, setQuery] = useStorageState('search', 'React');
+  const [query, setQuery] = useStorageState('search', '');
+  const [stories, setStories] = useState(initialStories);
+
+  function handleRemoveStory(item) {
+    const newStories = stories.filter(
+      (story) => story.objectID !== item.objectID
+    );
+    setStories(newStories);
+  }
 
   const searchedStories = stories.filter((story) => {
     return story.title.toLowerCase().includes(query.toLowerCase());
@@ -48,13 +57,13 @@ function App() {
   return (
     <div>
       <h1>My Hacker News</h1>
-      <InputWithLabel id='search' value={query} onChange={handleChange}>
+      <InputWithLabel id='search' value={query} onChange={handleChange} isFocus>
         Search:{' '}
       </InputWithLabel>
 
       <hr />
 
-      <List stories={searchedStories} />
+      <List stories={searchedStories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 }
@@ -68,29 +77,6 @@ function useStorageState(key, initialState) {
   }, [value]);
 
   return [value, setValue];
-}
-
-function List({ stories }) {
-  return (
-    <ul>
-      {stories.map((item) => {
-        return <Item item={item} key={item.author} />;
-      })}
-    </ul>
-  );
-}
-
-function Item({ item: { url, title, author, num_comments, points } }) {
-  return (
-    <li>
-      <span>
-        <a href={url}>{title}</a>
-      </span>
-      <span>{author}</span>
-      <span>{num_comments}</span>
-      <span>{points}</span>
-    </li>
-  );
 }
 
 export default App;

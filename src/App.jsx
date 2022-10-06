@@ -1,29 +1,38 @@
-import { useEffect, useState, useReducer } from 'react';
+import { SearchForm } from './components/SearchForm';
+import { useEffect, useState, useReducer, useCallback } from 'react';
+import axios from 'axios';
 import InputWithLabel from './components/InputWithLabel';
 import List from './components/List';
 
+const ACTIONS = {
+  INIT: 'STORIES_FETCH_INIT',
+  SUCCESS: 'STORIES_FETCH_SUCCESS',
+  FAILURE: 'STORIES_FETCH_FAILURE',
+  REMOVE: 'REMOVE_STORY',
+};
+
 const storiesReducer = (state, action) => {
   switch (action.type) {
-    case 'STORIES_FETCH_INIT':
+    case ACTIONS.INIT:
       return {
         ...state,
         isLoading: true,
         hasError: false,
       };
-    case 'STORIES_FETCH_SUCCESS':
+    case ACTIONS.SUCCESS:
       return {
         ...state,
         isLoading: false,
         hasError: false,
         data: action.payload,
       };
-    case 'STORIES_FETCH_FAILURE':
+    case ACTIONS.FAILURE:
       return {
         ...state,
         isLoading: false,
         hasError: true,
       };
-    case 'REMOVE_STORY':
+    case ACTIONS.REMOVE:
       return {
         ...state,
         data: state.data.filter(
@@ -44,45 +53,57 @@ function App() {
     isLoading: false,
     hasError: false,
   });
+  const [url, setUrl] = useState(`${API_ENDPOINT}${query}`);
+
+  // memoized
+
+  // useCallback
+
+  // reusable
+  const fetchStories = useCallback(async () => {
+    if (!query) return;
+    dispatchStories({ type: ACTIONS.INIT });
+
+    try {
+      const res = await axios.get(url);
+
+      dispatchStories({
+        type: ACTIONS.SUCCESS,
+        payload: res.data.hits, //value
+      });
+    } catch {
+      dispatchStories({ type: ACTIONS.FAILURE });
+    }
+  }, [url]);
 
   useEffect(() => {
-    // if(!query) return;
-    dispatchStories({ type: 'STORIES_FETCH_INIT' });
-    fetch(`${API_ENDPOINT}${query}`)
-      .then((res) => res.json())
-      .then((res) => {
-        dispatchStories({
-          type: 'STORIES_FETCH_SUCCESS',
-          payload: res.hits,
-        });
-      })
-      .catch(() => dispatchStories({ type: 'STORIES_FETCH_FAILURE' }));
-  }, []);
+    fetchStories();
+  }, [fetchStories]);
 
   function handleRemoveStory(item) {
     dispatchStories({
-      type: 'REMOVE_STORY',
+      type: ACTIONS.REMOVE,
       payload: item,
     });
   }
 
-  // client-side filtering
-  // server-side filtering
-
-  const searchedStories = stories.data.filter((story) => {
-    return story.title.toLowerCase().includes(query.toLowerCase());
-  });
-
-  function handleChange(e) {
+  function handleSearchInput(e) {
     setQuery(e.target.value);
+  }
+
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    setUrl(`${API_ENDPOINT}${query}`);
   }
 
   return (
     <div>
       <h1>My Hacker News</h1>
-      <InputWithLabel id='search' value={query} onChange={handleChange} isFocus>
-        Search:{' '}
-      </InputWithLabel>
+      <SearchForm
+        handleSearchSubmit={handleSearchSubmit}
+        query={query}
+        handleSearchInput={handleSearchInput}
+      />
 
       <hr />
 

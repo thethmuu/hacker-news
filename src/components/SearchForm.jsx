@@ -1,9 +1,12 @@
 import React from 'react';
 import InputWithLabel from './InputWithLabel';
+import styles from './SearchForm.module.css';
+import appStyles from '../App.module.css';
+import { StyledButtonLarge } from './Button';
 
 export function SearchForm({ handleSearchSubmit, query, handleSearchInput }) {
   return (
-    <form onSubmit={handleSearchSubmit}>
+    <form className={styles.searchForm} onSubmit={handleSearchSubmit}>
       <InputWithLabel
         id='search'
         value={query}
@@ -13,9 +16,9 @@ export function SearchForm({ handleSearchSubmit, query, handleSearchInput }) {
         Search:{' '}
       </InputWithLabel>
 
-      <button type='submit' disabled={!query}>
+      <StyledButtonLarge type='submit' disabled={!query}>
         Search
-      </button>
+      </StyledButtonLarge>
     </form>
   );
 }

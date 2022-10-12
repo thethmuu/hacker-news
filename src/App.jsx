@@ -1,7 +1,7 @@
 import { SearchForm } from './components/SearchForm';
 import { useEffect, useState, useReducer, useCallback } from 'react';
 import axios from 'axios';
-import InputWithLabel from './components/InputWithLabel';
+import styled from 'styled-components';
 import List from './components/List';
 
 const ACTIONS = {
@@ -45,6 +45,8 @@ const storiesReducer = (state, action) => {
 };
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+
+// top-level
 
 function App() {
   const [query, setQuery] = useStorageState('search', '');
@@ -96,9 +98,21 @@ function App() {
     setUrl(`${API_ENDPOINT}${query}`);
   }
 
+  const StyledContainer = styled.div`
+    height: 100vh;
+    padding: 1em;
+    background: #ededed;
+    color: #333;
+  `;
+
+  const StyledHeadline = styled.h1`
+    font-size: 3rem;
+    font-weight: 300;
+  `;
+
   return (
-    <div>
-      <h1>My Hacker News</h1>
+    <StyledContainer>
+      <StyledHeadline>My Hacker News</StyledHeadline>
       <SearchForm
         handleSearchSubmit={handleSearchSubmit}
         query={query}
@@ -114,7 +128,7 @@ function App() {
       ) : (
         <List stories={stories.data} onRemoveItem={handleRemoveStory} />
       )}
-    </div>
+    </StyledContainer>
   );
 }
 

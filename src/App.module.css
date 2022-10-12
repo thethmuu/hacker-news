@@ -1,0 +1,31 @@
+/* .container {
+  height: 100vh;
+  padding: 1em;
+  background: #ededed;
+  color: #333;
+} */
+
+/* .headline {
+  font-size: 3rem;
+  font-weight: 300;
+} */
+
+.button {
+  background-color: #ff731d;
+  color: white;
+  padding: 0.5em 1em;
+  border: 1px solid #ccc;
+  transition: background-color 100ms ease-in;
+}
+
+.buttonSm {
+  padding: 0.3em 0.8em;
+}
+
+.buttonLg {
+  padding: 0.5em 1em;
+}
+
+.button:hover {
+  background-color: #ef6007;
+}

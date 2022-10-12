@@ -46,7 +46,16 @@ const storiesReducer = (state, action) => {
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
-// top-level
+// custom hook
+function useStorageState(key, initialState) {
+  const [value, setValue] = useState(localStorage.getItem(key) || initialState);
+
+  useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value]);
+
+  return [value, setValue];
+}
 
 function App() {
   const [query, setQuery] = useStorageState('search', '');
@@ -57,11 +66,6 @@ function App() {
   });
   const [url, setUrl] = useState(`${API_ENDPOINT}${query}`);
 
-  // memoized
-
-  // useCallback
-
-  // reusable
   const fetchStories = useCallback(async () => {
     if (!query) return;
     dispatchStories({ type: ACTIONS.INIT });
@@ -98,18 +102,6 @@ function App() {
     setUrl(`${API_ENDPOINT}${query}`);
   }
 
-  const StyledContainer = styled.div`
-    height: 100vh;
-    padding: 1em;
-    background: #ededed;
-    color: #333;
-  `;
-
-  const StyledHeadline = styled.h1`
-    font-size: 3rem;
-    font-weight: 300;
-  `;
-
   return (
     <StyledContainer>
       <StyledHeadline>My Hacker News</StyledHeadline>
@@ -132,15 +124,16 @@ function App() {
   );
 }
 
-// custom hook
-function useStorageState(key, initialState) {
-  const [value, setValue] = useState(localStorage.getItem(key) || initialState);
-
-  useEffect(() => {
-    localStorage.setItem(key, value);
-  }, [value]);
-
-  return [value, setValue];
-}
-
 export default App;
+
+const StyledContainer = styled.div`
+  height: 100vh;
+  padding: 1em;
+  background: #ededed;
+  color: #333;
+`;
+
+const StyledHeadline = styled.h1`
+  font-size: 3rem;
+  font-weight: 300;
+`;

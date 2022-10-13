@@ -83,6 +83,7 @@ function App() {
   }, [url]);
 
   useEffect(() => {
+    console.count('render times')
     fetchStories();
   }, [fetchStories]);
 

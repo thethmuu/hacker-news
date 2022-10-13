@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { StyledButtonSmall } from './Button';
+import { ReactComponent as Cross } from '../assets/cross.svg';
 
 export default function Item({ item, onRemoveItem }) {
   return (
@@ -12,7 +13,7 @@ export default function Item({ item, onRemoveItem }) {
       <StyledColumn width='10%'>{item.points}</StyledColumn>
       <StyledColumn width='10%'>
         <StyledButtonSmall onClick={() => onRemoveItem(item)}>
-          Delete
+          <Cross height='16px' width='16px' />
         </StyledButtonSmall>
       </StyledColumn>
     </StyledItem>

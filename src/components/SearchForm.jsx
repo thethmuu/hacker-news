@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import InputWithLabel from './InputWithLabel';
 import styles from './SearchForm.module.css';
 import appStyles from '../App.module.css';
@@ -6,7 +7,7 @@ import { StyledButtonLarge } from './Button';
 
 export function SearchForm({ handleSearchSubmit, query, handleSearchInput }) {
   return (
-    <form className={styles.searchForm} onSubmit={handleSearchSubmit}>
+    <StyledForm className={styles.searchForm} onSubmit={handleSearchSubmit}>
       <InputWithLabel
         id='search'
         value={query}
@@ -19,6 +20,12 @@ export function SearchForm({ handleSearchSubmit, query, handleSearchInput }) {
       <StyledButtonLarge type='submit' disabled={!query}>
         Search
       </StyledButtonLarge>
-    </form>
+    </StyledForm>
   );
 }
+
+const StyledForm = styled.form`
+  padding: 0.5em 1em;
+  display: flex;
+  align-items: center;
+`;

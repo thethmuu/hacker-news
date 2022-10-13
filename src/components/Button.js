@@ -14,6 +14,9 @@ const StyledButton = styled.button`
 
 export const StyledButtonSmall = styled(StyledButton)`
   padding: 0.3em 0.8em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const StyledButtonLarge = styled(StyledButton)`

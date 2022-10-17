@@ -17,6 +17,7 @@ export const StyledButtonSmall = styled(StyledButton)`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const StyledButtonLarge = styled(StyledButton)`
